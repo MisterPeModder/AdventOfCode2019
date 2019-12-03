@@ -1,9 +1,9 @@
-#[aoc_generator(day1)]
+#[aoc_generator(day01)]
 pub fn day01_gen(input: &str) -> Vec<i32> {
     input.lines().map(|l| l.parse().unwrap()).collect()
 }
 
-#[aoc(day1, part1)]
+#[aoc(day01, part1)]
 pub fn day01_part1(input: &[i32]) -> i32 {
     input
         .iter()
@@ -20,7 +20,7 @@ fn calculate_fuel(n: i32) -> i32 {
     }
 }
 
-#[aoc(day1, part2)]
+#[aoc(day01, part2)]
 pub fn day01_part2(input: &[i32]) -> i32 {
     input.iter().map(|&n| calculate_fuel(n)).sum()
 }
