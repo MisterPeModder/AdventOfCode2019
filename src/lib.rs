@@ -1,4 +1,4 @@
-#![allow(clippy::trivially_copy_pass_by_ref)]
+#![allow(clippy::trivially_copy_pass_by_ref, unused_imports)]
 
 extern crate aoc_runner;
 #[macro_use]
@@ -14,5 +14,7 @@ mod day03;
 mod day04;
 mod day05;
 mod day06;
+
+pub mod util;
 
 aoc_lib! { year = 2019 }
