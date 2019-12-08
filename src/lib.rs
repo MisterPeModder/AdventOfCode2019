@@ -6,6 +6,7 @@ extern crate aoc_runner_derive;
 extern crate itertools;
 #[macro_use]
 extern crate lazy_static;
+extern crate image;
 extern crate regex;
 
 mod day01;
@@ -15,6 +16,7 @@ mod day04;
 mod day05;
 mod day06;
 mod day07;
+mod day08;
 
 pub mod util;
 
