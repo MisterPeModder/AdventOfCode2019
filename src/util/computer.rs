@@ -1,5 +1,6 @@
 use std::{error, fmt};
 
+#[derive(Debug)]
 pub struct Computer {
     mem: Vec<i64>,
     /// Instruction pointer
