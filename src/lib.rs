@@ -6,7 +6,6 @@ extern crate aoc_runner_derive;
 extern crate itertools;
 #[macro_use]
 extern crate lazy_static;
-extern crate image;
 extern crate num_integer;
 extern crate ordered_float;
 extern crate regex;

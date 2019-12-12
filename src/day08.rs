@@ -1,4 +1,3 @@
-use image::{png::PNGEncoder, ColorType, ImageBuffer};
 use itertools::Itertools;
 use std::{env, fs::File, iter::FromIterator, path::PathBuf};
 
@@ -52,7 +51,6 @@ pub fn day08_part1(input: &str) -> usize {
     numbers.ones * numbers.twos
 }
 
-// slightly overkill, but ¯\_(ツ)_/¯
 #[aoc(day08, part2)]
 pub fn day08_part2(input: &str) -> String {
     let layers: Vec<Vec<u8>> = input
@@ -62,37 +60,23 @@ pub fn day08_part2(input: &str) -> String {
         .into_iter()
         .map(FromIterator::from_iter)
         .collect();
-    let pixels = (0..IMG_SIZE)
+    (0..IMG_SIZE)
         .map(|i| {
             layers
                 .iter()
                 .fold(2, |pixel, layer| if pixel == 2 { layer[i] } else { pixel })
         })
-        .map(|d| match d {
-            0 => 0u8,
-            1 => 255,
-            _ => 100,
+        .chunks(IMG_WIDTH)
+        .into_iter()
+        .fold(String::with_capacity(IMG_SIZE), |mut res, row| {
+            res.push('\n');
+            row.for_each(|pixel| {
+                res.push(match pixel {
+                    0 => '░',
+                    1 => '█',
+                    _ => '?',
+                })
+            });
+            res
         })
-        .collect::<Vec<u8>>();
-    let mut path = PathBuf::from(env::var_os("OUTPUT_DIR").expect("missing OUTPUT_DIR variable"));
-    path.push("output_day08.png");
-    PNGEncoder::new(
-        File::create(&path)
-            .map_err(|e| {
-                format!(
-                    "error while creating image at {}: {}",
-                    path.to_string_lossy(),
-                    e
-                )
-            })
-            .unwrap(),
-    )
-    .encode(
-        &pixels,
-        IMG_WIDTH as u32,
-        IMG_HEIGHT as u32,
-        ColorType::Gray(8),
-    )
-    .unwrap();
-    format!("output path: {}", path.to_string_lossy())
 }
