@@ -7,7 +7,7 @@ extern crate itertools;
 #[macro_use]
 extern crate lazy_static;
 extern crate image;
-extern crate num_traits;
+extern crate num_integer;
 extern crate ordered_float;
 extern crate regex;
 
@@ -22,6 +22,7 @@ mod day08;
 mod day09;
 mod day10;
 mod day11;
+mod day12;
 
 pub mod util;
 
