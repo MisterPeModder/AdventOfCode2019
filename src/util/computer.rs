@@ -8,6 +8,7 @@ pub struct Computer {
     /// Relative base offset
     rbo: i64,
     stopped: bool,
+    next_input: Option<i64>,
 }
 
 impl Computer {
@@ -21,6 +22,7 @@ impl Computer {
             ip: 0,
             stopped: false,
             rbo: 0,
+            next_input: None,
         }
     }
 
@@ -70,8 +72,8 @@ impl Computer {
     }
 
     #[inline]
-    fn input(&mut self, input: Option<i64>) -> Result<i64> {
-        input.ok_or(Error {
+    fn input(&mut self) -> Result<i64> {
+        self.next_input.take().ok_or(Error {
             location: self.ip,
             kind: ErrorKind::NoInput,
         })
@@ -92,7 +94,7 @@ impl Computer {
     }
 
     #[inline]
-    fn run_instruction(&mut self, input: Option<i64>) -> Result<Action> {
+    fn run_instruction(&mut self) -> Result<Action> {
         let mut modes = [Mode::Position; 3];
         let ip = self.ip;
         match self.decode_instruction(ip, &mut modes)? {
@@ -116,10 +118,10 @@ impl Computer {
             }
             3 => {
                 // ipt: p1 = <input>
-                let i = self.input(input)?;
+                let i = self.input()?;
                 self.write(modes[0], ip + 1, i)?;
                 self.ip += 2;
-                return Ok(Action::Input);
+                //return Ok(Action::Input);
             }
             4 => {
                 // out: p1 -> <output>
@@ -180,10 +182,12 @@ impl Computer {
         }
 
         let mut iter = inputs.into_iter();
-        let mut input = iter.next();
         loop {
-            match self.run_instruction(input)? {
-                Action::Input => input = iter.next(),
+            if self.next_input.is_none() {
+                self.next_input = iter.next();
+            }
+            match self.run_instruction()? {
+                //Action::Input => input = iter.next(),
                 Action::Output(out) => return Ok(Some(out)),
                 Action::Shutdown => {
                     self.stopped = true;
@@ -223,7 +227,7 @@ impl Computer {
 enum Action {
     Shutdown,
     Continue,
-    Input,
+    //Input,
     Output(i64),
 }
 
